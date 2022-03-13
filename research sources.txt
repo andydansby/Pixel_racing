@@ -1,0 +1,13 @@
+http://www.retroprogramming.com/2014/03/plotting-mandelbrot-set-on-zx-spectrum.html
+
+http://www.breakintoprogram.co.uk/computers/zx-spectrum/assembly-language/z80-library-routines
+https://github.com/breakintoprogram/lib-spectrum/blob/master/lib/output.z80
+
+https://wiki.speccy.org/cursos/ensamblador/gfx2_direccionamiento#calculo-de-posiciones-de-pixeles
+
+https://wiki.speccy.org/programacion/ensamblador/calculo-coordenadas
+
+https://foro.speccy.org/viewtopic.php?f=6&t=2121&p=22406&hilit=PIXEL+ADD#p22406
+
+https://foro.speccy.org/viewtopic.php?f=6&t=2085&hilit=calc5&start=15
+
