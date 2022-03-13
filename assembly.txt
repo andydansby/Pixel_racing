@@ -1,0 +1,139 @@
+https://worldofspectrum.org/forums/discussion/comment/448363/#Comment_448363
+
+Shiru
+
+Easiest routine will be with these features:
+
+- Character-aligned coords
+- Frame inside of the area
+- Clears graphics
+
+It will consist of two separate parts: filling the graphics and filling the attributes. It will be rather large code, either with printing characters or not. Here is the version without printing the characters, it draws directly on the screen.
+
+ld h,10		;y
+	ld l,10		;x
+	ld b,5		;height
+	ld c,15		;width
+	ld a,8+7+64	;color
+	call drawArea
+	
+	jp $
+
+	
+
+drawArea
+	push bc
+	push hl
+
+;first we need to fill the attributes
+;to do this, we have to calculate the attribute area address from X,Y coordinates
+
+	ld d,#58	;MSB of beginning of the attributes area
+	ld e,l	;x
+	ld l,h
+	ld h,0
+	add hl,hl
+	add hl,hl
+	add hl,hl
+	add hl,hl
+	add hl,hl	  ;y*32
+	add hl,de	  ;+#5800+x, so we got the address in hl
+
+fillAttr0
+	push bc
+	push hl
+	ld b,c
+fillAttr1
+	ld (hl),a
+	inc l
+	djnz fillAttr1
+	pop hl
+	ld c,32		;b=0 after djnz
+	add hl,bc
+	pop bc
+	djnz fillAttr0
+
+	pop hl
+	
+;now we need to fill the screen area
+;first and last lines should be #ff, and all other #80,#00(for width-2),#01
+;to do this, we have to calculate the screen area address from X,Y coordinates
+
+	ld a,h		;this piece of code doing all the tricky math
+	rrca
+	rrca
+	rrca
+	and #e0
+	ld c,a
+	ld a,h
+	and #18
+	or #40
+	ld h,a
+	ld b,#00
+	add hl,bc	  ;we got the address in hl
+
+	pop bc
+	push bc
+	
+	call fillSolidLine  ;filling top line
+	call downHL      ;and going to the next line
+
+	ld a,b
+	add a,a
+	add a,a
+	add a,a
+	dec a
+	dec a
+	ld b,a		;in the middle there should be height*8-2 lines
+	dec c
+	dec c		;and the width-2 bytes as well
+
+middle                              ;this loop draws all the lines in the middle
+	push bc
+	push hl
+	ld (hl),#80           ;left edge
+	xor a
+	inc l
+mfill
+	ld (hl),a
+	inc l
+	dec c
+	jp nz,mfill
+	ld (hl),#01           ;right edge
+	pop hl
+	pop bc
+	call downHL
+	djnz middle
+
+	pop bc		;we need full width again, for the last (bottom) line
+	jp fillSolidLine	;the same as call ... ret
+	
+fillSolidLine
+	push bc
+	push hl
+	ld a,#ff
+fill0
+	ld (hl),a
+	inc l
+	dec c
+	jp nz,fill0
+	pop hl
+	pop bc
+	ret
+	
+;DOWN_HL+ routine by Spencer Winsent
+;this routine returns address of the next screen line, calculating it from the given current address
+
+downHL
+	inc h
+	ld a,h
+	and #07
+	ret nz
+	ld a,l
+	sub #e0
+	ld l,a
+	sbc a,a
+	and #f8
+	add a,h
+	ld h,a
+	ret
