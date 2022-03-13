@@ -1,0 +1,83 @@
+https://ia600502.us.archive.org/7/items/sinclair-user-magazine-075/SinclairUser_075_Jun_1988.pdf
+
+pages 86-87
+
+
+
+Hmmm, I thought. Cough, splutter, cough, I thought. How do you use Plot, Draw and Circle in machine code? More to the point why use Plot, Draw and Circle in machine code?
+I rang Damien Scattergood 'cos he's a super duper megaexpert at using the Spectrum Rom. OK Damien:
+
+Plot:
+This is the simplest to use of all the routines. The easiest method of using this routine is to call it from location #22E5 (8933 decimal). On entry, the routine expects to have the x, y co-ordinates of the point to be plotted in the BC register pair, so to plot a point equivalent to Basic's, Piot 100,90 we only need to write
+
+	LD BC, 5A64 ; Plot 100, 90
+	CALL #22E5	;call Plot ROM routine
+RET				;return to Basic
+
+The first thing this routine does is to store the pixel address in the system variable Coords (23677-23678). It then works out the address of the pixel to
+Plot and sets it. It will also work
+correctly if the Over 1 command has been issued from either Basic or machine code.
+
+Calling the Draw and Circle
+routines has the effect of corrupting the information held in the alternate HL register pair.
+
+Unfortunately the contents of the alternate HL register pair is needed by Basic and so if we wish to return to Basic then this register pair must be saved and later restored.
+
+First we must switch to the alternate register set by issuing the EXX command. This will allow us to use a Push HL command to save the alternate register pair which we then follow with another EXX command to bring back the normal register set. On return from our routine, we will issue the same commands except we use a Pop HL instead of the Push HL command to restore our old
+H'L'.
+
+Draw:
+This routine which is located at #24BA (9402) requires 2 register pairs to be set up. BC must hold the absolute values of x and y, the steps of the Draw statement. DE must hold SGN x and SGN y, the directions of the plot. That is, if we wanted to Draw 50, -50 we would use
+
+...
+	EXX				;save HL'
+	PUSH HL
+	EXX
+	LD BC, #3232	;distances 50, 50
+	LD DE, #FF01	;directions -50, 50
+	CALL #24BA		; draw the line
+	EXX				;restore 'HL
+	POP HL
+	EXX
+RET
+
+The routine draws from the last point plotted. This value is stored in the Coords system variable. So, if we wanted to set the last point plotted we could easily do this by either plotting the point using the plot command or by simply setting the value of Coord to the point we wish to draw from. This is easily done in assembler with
+
+	LD A, 100
+	LD (COORDS + 0), A	;first coordinate
+	LD A, 100
+	LD (COORDS + 1), A	;second coordinate
+
+Circle:
+
+This Rom routine is slightly different from the others in so far as the values to be used in the Circle command must be placed on to the calculator stack.
+
+This does not pose that many problems, as there are already available to us routines to put numbers on to the calculator stack. The simplest of these to use is Stack-A which takes the value stored in the A register and places it on to the calculator stack for us. Stack A is
+located ot #2D28 (11560). 
+
+The values of the Circle command are placed on to the stack in the some order as in Basic. So if we wanted to do the command Circle 20,30,40, then the order in which to stack our values would be
+
+	LD A, 20
+	CALL STACK A
+	LD A, 30
+	CALL STACK A
+	LD A, 40
+	CALL STACK A
+	
+The circle routine resides at location #2D23 (11555). The value in HL' again has to be saved. Thus, to draw a circle of
+radius 40 with its centre at 100,100 our code would be
+
+	EXX				;save HL'
+	PUSH HL
+	EXX
+	LD A, #64		;circle centre
+	CALL STACK A	;stack the values
+	LD A, #64		;circle radius 40
+	CALL STACK A	;stack the radius
+	CALL #232D		;draw the circle
+	EXX				;RESTORE HL'
+	POP HL
+	EXX
+RET
+
+

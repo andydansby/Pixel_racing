@@ -1,0 +1,56 @@
+
+IF !DEFINED_startup
+	defc	DEFINED_startup = 1
+	defc startup = 9
+	IFNDEF startup
+	ENDIF
+ENDIF
+
+
+IF !DEFINED_CLIB_OPT_PRINTF
+	defc	DEFINED_CLIB_OPT_PRINTF = 1
+	defc CLIB_OPT_PRINTF = 0x4001401
+	IFNDEF CLIB_OPT_PRINTF
+	ENDIF
+ENDIF
+
+
+IF !DEFINED_CLIB_OPT_PRINTF_2
+	defc	DEFINED_CLIB_OPT_PRINTF_2 = 1
+	defc CLIB_OPT_PRINTF_2 = 0
+	IFNDEF CLIB_OPT_PRINTF_2
+	ENDIF
+ENDIF
+
+
+IF !DEFINED_CLIB_OPT_SCANF
+	defc	DEFINED_CLIB_OPT_SCANF = 1
+	defc CLIB_OPT_SCANF = 0x4001401
+	IFNDEF CLIB_OPT_SCANF
+	ENDIF
+ENDIF
+
+
+IF !DEFINED_CLIB_OPT_SCANF_2
+	defc	DEFINED_CLIB_OPT_SCANF_2 = 1
+	defc CLIB_OPT_SCANF_2 = 0
+	IFNDEF CLIB_OPT_SCANF_2
+	ENDIF
+ENDIF
+
+
+IF !DEFINED_CRT_printf_format
+	defc	DEFINED_CRT_printf_format = 1
+	defc CRT_printf_format = 0x00001400
+ELSE
+	UNDEFINE temp_printf_format
+	defc temp_printf_format = CRT_printf_format
+	UNDEFINE CRT_printf_format
+	defc CRT_printf_format = temp_printf_format | 0x00001400
+ENDIF
+
+
+IF !NEED_printf
+	DEFINE	NEED_printf
+ENDIF
+
