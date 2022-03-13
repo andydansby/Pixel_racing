@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="Plot Routines" />
+		<Option pch_mode="2" />
+		<Option compiler="sdcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin/Debug/bezier_curve" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="sdcc" />
+				<Compiler>
+					<Add option="-g" />
+				</Compiler>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+		</Compiler>
+		<Unit filename="../assembly.txt" />
+		<Unit filename="../backup.txt" />
+		<Unit filename="../compile.bat" />
+		<Unit filename="../credits.txt" />
+		<Unit filename="../errors.txt" />
+		<Unit filename="../externs.h" />
+		<Unit filename="../main.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../mmap.inc" />
+		<Unit filename="../notes.txt" />
+		<Unit filename="../plot.asm" />
+		<Unit filename="../plot.h" />
+		<Unit filename="../plot.lst" />
+		<Unit filename="../research sources.txt" />
+		<Unit filename="../routines.h" />
+		<Unit filename="../timer.h" />
+		<Unit filename="../variables.h" />
+		<Unit filename="../zpragma.inc" />
+		<Extensions>
+			<lib_finder disable_auto="1" />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>
