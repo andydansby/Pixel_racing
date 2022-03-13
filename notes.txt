@@ -1,0 +1,102 @@
+PUBLIC _Get_Pixel_Address2
+_Get_Pixel_Address2:
+
+    ld bc, (_gfx_xy)
+    LD A,B              ; Calculate Y2,Y1,Y0
+    AND %00000111   ;7  ; Mask out unwanted bits
+    OR %01000000    ;64 ; Set base address of screen
+    LD H,A              ; Store in H
+    LD A,B              ; Calculate Y7,Y6
+    RRA                 ; Shift to position
+    RRA
+    RRA
+    AND %00011000   ;24 ; Mask out unwanted bits
+    OR H                ; OR with Y2,Y1,Y0
+    LD H,A              ; Store in H
+    LD A,B              ; Calculate Y5,Y4,Y3
+    RLA                 ; Shift to position
+    RLA
+    AND %11100000   ;224    ; Mask out unwanted bits
+    LD L,A              ; Store in L
+    LD A,C              ; Calculate X4,X3,X2,X1,X0
+    RRA                 ; Shift into position
+    RRA
+    RRA
+    AND %00011111  ;31  ; Mask out unwanted bits
+    OR L                ; OR with Y5,Y4,Y3
+    LD L,A              ; Store in L
+    ;ADDRESS IS FULLY FORMED HERE IN HL
+
+    LD A,C
+    AND 7
+    LD DE, WTF_bits
+    ADD A,E
+    LD E,A
+    LD A,(DE)
+    XOR (HL)
+    LD (HL),A
+
+
+    ;output to screen
+    or (hl)
+    ld (hl),a
+
+
+RET
+WTF_bits: defb 128,64,32,16,8,4,2,1
+
+PUBLIC _plotpixel3
+_plotpixel3:
+
+    PUSH BC
+
+    ld bc, (_gfx_xy)
+    LD a,b
+    AND A
+    RRA
+    SCF ; Set Carry Flag
+    RRA
+    AND A
+    RRA
+    XOR B
+    AND %11111000
+    XOR B
+    LD H,A          ;LD D,A
+    LD A,C
+    RLCA
+    RLCA
+    RLCA
+    XOR B
+    AND %11000111
+    XOR B
+    RLCA
+    RLCA
+    LD L,A
+
+    LD A,C
+    AND 7
+
+    LD B, A
+
+
+    LD DE, plotpixel3_bits
+    ADD A,E
+    LD E,A
+    LD A,(DE)
+    XOR (HL)
+    LD (HL),A
+
+
+    ;output to screen
+    or (hl)
+    ld (hl),a
+
+    POP BC
+
+;should output in hl $4F 69
+RET
+
+plotpixel3_bits: defb 128,64,32,16,8,4,2,1
+
+
+
