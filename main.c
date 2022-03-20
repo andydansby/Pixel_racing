@@ -213,11 +213,13 @@ void options1 (void)
 
             dejavuPOINT_routine();
 
+            //printf("time MS =  %ld\n", timeDiff);
+		    //forcedPause(15000);
+            //pressKey ();
             timerEnd();
             waitForKey ();
             break;
 		}
-
 
 		if (in_key_pressed( IN_KEY_SCANCODE_d ))
 		{
@@ -229,9 +231,7 @@ void options1 (void)
 
             timerEnd();
             waitForKey ();
-		    //printf("time MS =  %ld\n", timeDiff);
-		    //forcedPause(15000);
-            //pressKey ();
+
             break;
 		}
 
@@ -261,10 +261,44 @@ void options1 (void)
             break;
 		}
 
+		if (in_key_pressed( IN_KEY_SCANCODE_h ))
+		{//more optimized Joffa routine
+		    zx_cls(PAPER_WHITE | INK_BLUE);
+		    printf("\x16\x01\x02");
+		    timerStart();
 
+		    joffa_pixel2_routine();
 
+            timerEnd();
+            waitForKey ();
+            break;
+		}
 
+        if (in_key_pressed( IN_KEY_SCANCODE_j ))
+		{
+		    zx_cls(PAPER_WHITE | INK_BLUE);
+		    printf("\x16\x01\x02");
+		    timerStart();
 
+		    z00m_routine();
+
+            timerEnd();
+            waitForKey ();
+            break;
+		}
+
+        if (in_key_pressed( IN_KEY_SCANCODE_k ))
+		{
+		    zx_cls(PAPER_WHITE | INK_BLUE);
+		    printf("\x16\x01\x02");
+		    timerStart();
+
+		    Belfield_routine();
+
+            timerEnd();
+            waitForKey ();
+            break;
+		}
 
 		if (in_key_pressed( IN_KEY_SCANCODE_z ))
 		{   //PIXELADD
@@ -283,7 +317,7 @@ void options1 (void)
 		// Currently testing
 
 		if (in_key_pressed( IN_KEY_SCANCODE_0 ))
-		{   //PIXELADD
+		{   //random pixels
 		    zx_cls(PAPER_WHITE | INK_BLACK);
 		    printf("\x16\x01\x02");
 		    timerStart();
@@ -314,7 +348,7 @@ void options1 (void)
 		    printf("\x16\x01\x02");
 		    timerStart();
 
-
+            fastBrain ();
 
             timerEnd();
             waitForKey ();
@@ -375,18 +409,12 @@ void options1 (void)
             break;
 		}
 
-		if (in_key_pressed( IN_KEY_SCANCODE_8 ))
-		{
-		    zx_cls(PAPER_WHITE | INK_BLUE);
-		    printf("\x16\x01\x02");
-		    timerStart();
 
-		    asmPlot2Fill();
 
-            timerEnd();
-            waitForKey ();
-            break;
-		}
+
+
+
+
     }//end while
 }//end options1
 
@@ -399,8 +427,7 @@ void printOptions (void)
         zx_border (2);
         printf("\x16\x01\x02");
 
-        printf ("Welcome to the Plot tester V0.1");
-        printf ("\n");
+        printf ("Welcome to the Plot tester V0.2\n");
         printf ("press a key for test\n");
         printf ("\n");
 
@@ -414,11 +441,14 @@ void printOptions (void)
         printf ("i - CALC5        215-334 T-states per pixel\n");
         printf ("o - PIXEL-ADD    201-320 T-states per pixel\n");
         printf ("p - Calc 5 w/ table 222 T-states per pixel\n");
-        printf ("a - PIXEL-ADD w/ table 198 T-states per\n");
+        printf ("a - PIXEL-ADD w/ table 191 T-states per\n");
         printf ("s - dejavuPOINT w/ table 206 T-states per\n");
-        printf ("d - rtunes_pixel w/ table 164 T-states per\n");
+        printf ("d - rtunes_pixel w/ table 174 T-states per\n");
         printf ("f - joffa_pixel w/ table  198 T-states per\n");
-        printf ("g - hella_plot w/ table   174 T-states per\n\n");
+        printf ("g - hella_plot w/ table   174 T-states per\n");
+        printf ("h - Joffa Optimized       191 T-states per\n");
+        printf ("j - z00m Optimized        188 T-states per\n");
+        printf ("k - Belfield Optimized    ??? T-states per\n");
         //printf ("1-0 - Tester Routines, may be junk\n\n");
 
 

@@ -15,17 +15,10 @@
 ;; memory model
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-SECTION tabxx1
-org $8100
+;SECTION tabxx1
+;org $8100
 
-SECTION tabxx2
-org $8200
 
-SECTION tabyy1
-org $8300
-
-SECTION tabyy2
-org $8400
 
 
 ;;-------------------------------------
@@ -33,8 +26,8 @@ org $8400
 SECTION UNCONTENDED
 org 0x8000      ;	32768
 
-SECTION IM2_VECTOR_PLACEMENT    ;new
-org 0xBDBD
+;SECTION HIGHRAM
+;org 0xD000
 
 SECTION CONTENDED
 org 24300      ;	24200 = 0x5E88

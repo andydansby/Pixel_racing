@@ -4,10 +4,16 @@ del "1_plot.tap"
 cls
 
 @rem -pragma-include:zpragma.inc
-@rem zcc +zx -vn -SO3 -m -lm -clib=new main.c -o 1bezier -startup=9 -create-app
 @rem zcc +zx -vn -SO3 -m -lm -clib=new -o 1_plot @plot.lst -pragma-include:zpragma.inc -startup=9 -create-app
 
+
 zcc +zx -vn -SO3 -m -lm -clib=new -o 1_plot @plot.lst -startup=9 -create-app
+
+
+
+
+
+
 
 del "1_plot_CODE.bin"
 del "1_plot_UNASSIGNED.bin"
