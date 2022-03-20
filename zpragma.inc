@@ -1,7 +1,7 @@
 #pragma output __MMAP = -1
 // memory map is provided in file "mmap.inc"
 
-#pragma output CRT_ORG_CODE = 32768
+#pragma output CRT_ORG_CODE = 0x8000
 // main binary program start        32768
 
 #pragma output REGISTER_SP = 0xC000
