@@ -375,7 +375,7 @@ void options1 (void)
 		    printf("\x16\x01\x02");
 		    timerStart();
 
-		    //noBrain();
+		    loop_tester_routine();
 
             timerEnd();
             waitForKey ();

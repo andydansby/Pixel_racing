@@ -4,6 +4,7 @@ extern unsigned char gfx_y;
 extern unsigned int gfx_xy;
 extern unsigned int gfx_yx;
 
+extern void __FASTCALL__ loop_tester (void);
 
 //routines
 extern void __CALLEE__ ZX_ROM (void);
@@ -25,7 +26,7 @@ extern void __FASTCALL__ Get_Pixel_Address(void);//uses BC/hl
 extern void __FASTCALL__ CALC5(void);//uses BC/hl
 extern void __FASTCALL__ CALC55(void);//uses de/hl good
 
-extern void __FASTCALL__ PIXELADD (void//uses BC/de/hl
+extern void __FASTCALL__ PIXELADD (void);//uses BC/de/hl
 extern void __FASTCALL__ PIXELADD2(void);//uses BC/de/hl
 
 extern void __FASTCALL__ dejavuPOINT(void);//uses BC/de/hl

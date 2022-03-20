@@ -45,6 +45,20 @@ void zxSpectrumROM (void)
     }
 }
 
+void loop_tester_routine (void)
+{
+    zx_cls(PAPER_WHITE | INK_BLACK);
+
+    for (yy = 0; yy < 192; yy++)
+    {
+        for (xx = 0; xx < 255 ; xx++)
+        {
+            gfx_xy = (yy << 8) | xx;
+            loop_tester();
+        }
+    }
+}
+
 //works
 void z88dkPlotFill (void)
 {

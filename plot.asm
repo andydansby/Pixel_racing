@@ -51,7 +51,9 @@ include "\asm_files\belfield.asm"
 include "\asm_files\dmsmith.asm"
 
 
-
+PUBLIC _loop_tester
+_loop_tester:
+ret
 
 PUBLIC _einar_table
 _einar_table:
