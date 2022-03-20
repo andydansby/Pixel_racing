@@ -1,0 +1,37 @@
+
+
+
+ver .01 original release
+
+ver .02
+change
+
+in plot routines, bit combining routine, thanks dfzx
+gfx_xy = (yy << 8) | xx;
+
+Change ROM routine to fill entire screen
+Change ROM routine to use a different entry point
+    thanks Rui F Ribeiro
+
+Change ROM routine to eliminate checking which
+    greatly improves the speed
+
+Move Routines in ASM to their own files
+    to improve readibility
+
+optimized Joffa's routine improving speed
+
+tweaked hella_plot
+
+modified CALC 5 optimized and remove push pop
+
+correct t-state count in Rtunes plot
+
+add z00m Plot
+
+add Belfield_routine
+
+move X position bitfield to plot.asm and
+    commended out of individual routines
+
+
