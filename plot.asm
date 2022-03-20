@@ -1,6 +1,5 @@
 SECTION code_user
 
-
 PUBLIC _gfx_x
 _gfx_x:
 defb 0       ; coordinates
@@ -19,800 +18,89 @@ PUBLIC _gfx_yx
 _gfx_yx:
 defw 0
 
-PUBLIC _ZX_ROM
-_ZX_ROM:
-;ROM version
-ld bc, (_gfx_xy)        ;20 ticks
-;call Plot ROM routine
-	call $22e5
-ret
-
+;;;
+X_PositionBits: defb 128,64,32,16,8,4,2,1
+;;;
 
 ; WORKING ROUTINES
-
-;WORKS - LEAVE ALONE
-;http://www.retroprogramming.com/2014/03/plotting-mandelbrot-set-on-zx-spectrum.html
-;input DE  D = X and E = Y
-; output in HL
-PUBLIC _fastPlot1
-_fastPlot1:          ; plot d = x-axis, e = y-axis
-
-    ld de, (_gfx_xy)
-    ld a,7
-    and d
-    ld b,a
-    inc b
-    ld a,e
-    rra
-    scf
-    rra
-    or a
-    rra
-    ld l,a
-    xor e
-    and 248
-    xor e
-    ld h,a
-    ld a,d
-    xor l
-    and 7
-    xor d
-    rrca
-    rrca
-    rrca
-
-check_for_address1:
-    ld l,a
-    ld a,1
-    ;one not L, I am not certain why this works
-
-PLOTBIT2:
-    rrca
-    djnz PLOTBIT2
-    or (hl)
-    ld (hl),a
-
-ret
-
-
-;WORKS - LEAVE ALONE
-;https://github.com/ibancg/zxcircle/blob/master/zxcircle.asm
-PUBLIC _table_plot
-_table_plot:
-
-; keep the register BC
-    push bc
-
-    ld hl, tabpow2
-    ld a, (_gfx_x)
-    and 7       ; gfx_x mod 8
-    ld b,0
-    ld c,a
-    add hl,bc
-    ld a,(hl)
-    ld e,a      ; e contains one bit set
-
-    ld hl, tablinidx
-    ld a, (_gfx_y)
-    ld b,0
-    ld c,a
-    add hl,bc
-    ld a,(hl)   ; table lookup
-
-    ld h,0
-    ld l,a
-    add hl,hl
-    add hl,hl
-    add hl,hl
-    add hl,hl
-    add hl,hl       ; x32 (16 bits)
-
-    set 6,h         ; adds the screen start address (16384)
-
-    ld a, (_gfx_x)
-    srl a
-    srl a
-    srl a           ; gfx_x/8.
-
-    or l
-    ld l,a         ; + gfx_x/8.
-
-    ld a,(hl)
-    or e           ; or = superposition mode.
-    ld (hl),a      ; set the pixel.
-
-    pop bc          ; recovers BC
-ret
-
-;; -----------------------------------------------
-tabpow2:
-    ;; lookup table with powers of 2
-    defb    128,64,32,16,8,4,2,1
-
-    ;; screen lines lookup table
-tablinidx:
-    defb    0,8,16,24,32,40,48,56,1,9,17,25,33,41,49,57
-    defb    2,10,18,26,34,42,50,58,3,11,19,27,35,43,51,59
-    defb    4,12,20,28,36,44,52,60,5,13,21,29,37,45,53,61
-    defb    6,14,22,30,38,46,54,62,7,15,23,31,39,47,55,63
-
-    defb    64,72,80,88,96,104,112,120,65,73,81,89,97,105,113,121
-    defb    66,74,82,90,98,106,114,122,67,75,83,91,99,107,115,123
-    defb    68,76,84,92,100,108,116,124,69,77,85,93,101,109,117,125
-    defb    70,78,86,94,102,110,118,126,71,79,87,95,103,111,119,127
-
-    defb    128,136,144,152,160,168,176,184,129,137,145,153,161,169,177,185
-    defb    130,138,146,154,162,170,178,186,131,139,147,155,163,171,179,187
-    defb    132,140,148,156,164,172,180,188,133,141,149,157,165,173,181,189
-    defb    134,142,150,158,166,174,182,190,135,143,151,159,167,175,183,191
-
-
-;https://worldofspectrum.org/forums/discussion/4460/
-;WORKS - LEAVE ALONE
-;============================================================================
-; put pixel
-; d = x
-; e = y
-;============================================================================
-PUBLIC _putpix
-_putpix:
-    ld de, (_gfx_xy)
-
-    ld a,e ; 0-63 or 64-127 or 128-191
-    and 11000000b
-    rrca
-    rrca
-    rrca
-    add a, $40
-    ld h,a
-
-    ld a,e ; y mod 8
-    and 00000111b
-    add a,h
-    ld h,a
-
-    ld a,e
-    and 00111000b
-    rlca
-    rlca
-    ld l,a
-
-    ld a,d ; x / 8
-    and 11111000b
-    rrca
-    rrca
-    rrca
-    or l
-    ld l,a
-
-    ld a,d ; bits count
-    and 00000111b
-    ld bc,putpix_bits
-    add a,c
-    ld c,a
-    ld a,(bc)
-
-    ld b,(hl)
-    or b
-    ld (hl),a
-ret
-
-putpix_bits: defb 128,64,32,16,8,4,2,1
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-;https://worldofspectrum.org/forums/discussion/37438/plot-and-draw-in-machine-code/p1
-;WORKS - LEAVE ALONE
-PUBLIC _AA_PLOT
-_AA_PLOT:
-	; enter:
-	; h = pix Y 0..191
-	; l = pix X 0..255
-	; uses: af, b, de, hl
-
-	push bc ; save the BC register
-
-    ld hl, (_gfx_xy)
-
-	ld a,l
-	and $07   ; a = bit position from leftmost bit (0 = leftmost pix in byte)
-
-	ld b,a
-	ld a,$80   ; a = pixel mask starting at leftmost pixel in byte
-	jr z, AA_norotate   ; if bit position is 0 we already have pixel mask
-
-AA_rotate:   ; else rotate pixel mask right 'b' times
-   rra
-   djnz AA_rotate
-
-AA_norotate:
-   ld b,a   ; b = pixel mask
-
-   call AA_PIX2SCR   ; compute hl = screen address from pixel coordinates
-
-   ld a,b   ; get pixel mask
-   or (hl)   ; OR with screen contents
-   ld (hl),a   ; write to screen
-   pop bc  ;restore BC
-ret   ; note no change to attribute
-
-AA_PIX2SCR:
-	; enter:
-	; l = pix X 0..255
-	; h = pix Y 0..191
-	; exit : hl = screen address
-	; uses: af, d, hl
-
-	ld a,h   ; a = y coord = BBLL LSSS
-	and $07  ; a = 0000 0SSS
-	or $40    ; a = 0100 0SSS
-	ld d,a     ; d = 0100 0SSS
-	ld a,h    ; a = y coord = BBLL LSSS
-	rra
-	rra
-	rra       ; a = ???B BLLL
-	and $18  ; a = 000B B000
-	or d     ; a = 010B BSSS
-	ld d,a   ; d = 010B BSSS
-
-	srl l
-	srl l
-	srl l   ; l = 000C CCCC
-	ld a,h   ; a = y coord = BBLL LSSS
-	rla
-	rla      ; a = LLLS SS??
-	and $e0   ; a = LLL0 0000
-	or l    ; a = LLLC CCCC
-
-	ld l,a
-	ld h,d   ; hl = 010B BSSS LLLC CCCC
-
-
-ret
-
-
+;Fastcall only supports one parameter in DEHL
+;L = 8 bit
+;HL = 16 bit
+;DEHL = 32 bit
 ;;;;;;;;;;;;;;;;;;
-;WORKS - LEAVE ALONE
-; Get screen address
-;  B = Y pixel position
-;  C = X pixel position
-; Returns address in HL
-;http://www.breakintoprogram.co.uk/computers/zx-spectrum/screen-memory-layout
-PUBLIC _Get_Pixel_Address
-_Get_Pixel_Address:
 
-    push bc ; save the bc register
-
-    ld bc, (_gfx_xy)
-    LD A,B              ; Calculate Y2,Y1,Y0
-    AND %00000111   ;7  ; Mask out unwanted bits
-    OR %01000000    ;64 ; Set base address of screen
-    LD H,A              ; Store in H
-    LD A,B              ; Calculate Y7,Y6
-    RRA                 ; Shift to position
-    RRA
-    RRA
-    AND %00011000   ;24 ; Mask out unwanted bits
-    OR H                ; OR with Y2,Y1,Y0
-    LD H,A              ; Store in H
-    LD A,B              ; Calculate Y5,Y4,Y3
-    RLA                 ; Shift to position
-    RLA
-    AND %11100000   ;224    ; Mask out unwanted bits
-    LD L,A              ; Store in L
-    LD A,C              ; Calculate X4,X3,X2,X1,X0
-    RRA                 ; Shift into position
-    RRA
-    RRA
-    AND %00011111  ;31  ; Mask out unwanted bits
-    OR L                ; OR with Y5,Y4,Y3
-    LD L,A              ; Store in L
-    ;ADDRESS IS FULLY FORMED HERE IN HL
-
-; Finally, calculate relative pixel position:
-    LD A, C   ; We retrieve the coordinate X
-    AND 7   ; AND 00000111 to get pixel
-    ; A = 00000DPI
-
-    LD B, A          ; We load A (pixel position) into B
-    INC B            ; We increment B (for loop passes)
-    XOR A            ; A = 0
-    SCF              ; Set Carry Flag (A=0, CF=1)
-pix_rotate_bit_1:
-    RRA              ; We rotate A to the right B times
-    DJNZ pix_rotate_bit_1
-
-    ;output to screen
-    or (hl)
-    ld (hl),a
-
-    pop bc  ; recovers registers.
-RET
+include "\asm_files\zx_ROM.asm"
+include "\asm_files\fastPlot1.asm"
+include "\asm_files\table_plot.asm"
+include "\asm_files\putpix.asm"
+include "\asm_files\AA_PLOT.asm"
+include "\asm_files\Get_Pixel_Address.asm"
+include "\asm_files\calc5.asm"
+include "\asm_files\pixel_add.asm"
+include "\asm_files\dejavuPOINT.asm"
+include "\asm_files\rtunes.asm"
+include "\asm_files\joffa_pixel.asm"
+include "\asm_files\hella_plot.asm"
+include "\asm_files\z00m.asm"
+include "\asm_files\belfield.asm"
 
 
 
-;;;;;;;;;;;;;;;;;;
-;WORKS - LEAVE ALONE
-;https://wiki.speccy.org/programacion/ensamblador/calculo-coordenadas
-; Get screen address
-; B = Y pixel position
-; C = X pixel position
-; Returns address in HL
-PUBLIC _CALC5
-_CALC5:
-;--------------------------------------------
-    push bc
-    ld bc, (_gfx_xy)
-    ; Calculation of the upper part of the address:
-    LD A,B
-    AND 7   ; A = 00000SSSb
-    LD H,A  ; We store it in H
-    LD A,B  ; We retrieve again Y
-    RRA
-    RRA
-    RRA     ; We rotate to obtain the third
-    AND $18  ; with an AND 00011000b -> 000TT000b
-    OR H    ; H = H OR A = 00000SSSb OR 000TT000b
-    OR $40   ; We mix H with 01000000b (vram)
-    LD H,A  ; We establish the final "H"
-
-    ; Calculation of the lower part of the address:
-    LD  A,C   ; A = X coordinate
-    RRA
-    RRA
-    RRA     ; We rotate to obtain CCCCCb
-    AND $1F  ; A = A AND 31 = 000CCCCCb
-    LD L,A  ; L = 000CCCCCb
-    LD A,B  ; We retrieve again Y
-    RLA     ; We rotate to get NNN
-    RLA
-    AND $E0 ; A = A AND 11100000b
-    OR L    ; L = NNNCCCCC
-
-    finished:
-    LD L,A  ; We establish the final "L"
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-    ;address is now in HL
-
-    ld a,c   ; load X position
-    and $07
-    ;ld b,a
-
-    ;Relative_to_Mask:
-    LD B, A ; We load A (pixel position) into B
-    INC B   ; We increment B (for loop passes)
-    XOR A   ; A = 0
-    SCF ; Set Carry Flag (A=0, CF=1)
-
-CALC5_rotate:
-    RRA     ; We rotate A to the right B times
-    DJNZ CALC5_rotate
-
-    or (hl) ; OR with screen contents
-    ld (hl),a   ; write to screen
-
-    pop bc
-RET
 
 
-;WORKS - LEAVE ALONE
-; Get screen address
-; B = Y pixel position
-; C = X pixel position
-;;;;;;;;;;;;;;;;;;;;;;;;;
-;in BC B = Y  C = X
-;out to HL with address and a with pixel position
-;https://foro.speccy.org/viewtopic.php?f=6&t=2085&hilit=calc5&start=15
-PUBLIC _PIXELADD
-_PIXELADD:
+include "\asm_files\dmsmith.asm"
 
-    push bc ;save bc register
 
+
+
+PUBLIC _einar_table
+_einar_table:
+
+;On Entry C = xcoord, B = ycoord
     ld BC, (_gfx_xy)
-
-    ld A, B
-
-    AND A   ; clear carry (already clear)
-    RRA     ; 0xxxxxxx
-    SCF     ; set carry flag
-    RRA     ; 10xxxxxx
-    AND A   ; clear carry flag
-    RRA     ; 010xxxxx
-
-    XOR B   ;
-    AND $F8 ; keep the top 5 bits 11111000
-    XOR B   ; 010xxbbb
-    LD H,A  ; transfer high byte to H.
-
-    ; the low byte is derived from both X and Y.
-    LD A,C  ; the x value 0-255.
-    RLCA    ;
-    RLCA    ;
-    RLCA    ;
-    XOR B   ; the y value
-    AND $C7 ; apply mask 11000111
-    XOR B   ; restore unmasked bits  xxyyyxxx
-    RLCA    ; rotate to              xyyyxxxx
-    RLCA    ; required position.     yyyxxxxx
-    LD L,A  ; low byte to L.
-
-    ld a,c   ; load X position
-    and $07
-    ;ld b,a
-
-    ;Relative_to_Mask:
-    LD B, A ; We load A (pixel position) into B
-    INC B   ; We increment B (for loop passes)
-    XOR A   ; A = 0
-    SCF ; Set Carry Flag (A=0, CF=1)
-
-PIXELADD_rotate:
-    RRA     ; We rotate A to the right B times
-    DJNZ PIXELADD_rotate
-
-    or (hl) ; OR with screen contents
-    ld (hl),a   ; write to screen
-
-    pop bc  ;restore register
-RET ; return
-
-
-PUBLIC _CALC55
-_CALC55:
-;--------------------------------------------
-    push bc
-
-    ld bc, (_gfx_xy)
-    ; Calculation of the upper part of the address:
-    LD A,B
-    AND 7   ; A = 00000SSSb
-    LD H,A  ; We store it in H
-    LD A,B  ; We retrieve again Y
-    RRA
-    RRA
-    RRA     ; We rotate to obtain the third
-    AND $18  ; with an AND 00011000b -> 000TT000b
-    OR H    ; H = H OR A = 00000SSSb OR 000TT000b
-    OR $40   ; We mix H with 01000000b (vram)
-    LD H,A  ; We establish the final "H"
-
-    ; Calculation of the lower part of the address:
-    LD  A,C   ; A = X coordinate
-    RRA
-    RRA
-    RRA     ; We rotate to obtain CCCCCb
-    AND $1F  ; A = A AND 31 = 000CCCCCb
-    LD L,A  ; L = 000CCCCCb
-    LD A,B  ; We retrieve again Y
-    RLA     ; We rotate to get NNN
-    RLA
-    AND $E0 ; A = A AND 11100000b
-    OR L    ; L = NNNCCCCC
-
-    LD L,A  ; We establish the final "L"
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-    ;address is now in HL
-
-    ld a,c   ; load X position
-    and $07
-    ld bc,CALC55_bits
-    add a,c
-    ld c,a
-    ld a,(bc)
-
-    ld b,(hl)
-    or b
-    ld (hl),a
-
-    pop bc
-ret
-CALC55_bits: defb 128,64,32,16,8,4,2,1
-
-
-
-PUBLIC _PIXELADD2
-_PIXELADD2:
-
-    push bc
-    ld BC, (_gfx_xy)
-
-    ld A, B
-
-    AND A   ; clear carry (already clear)
-    RRA     ; 0xxxxxxx
-    SCF     ; set carry flag
-    RRA     ; 10xxxxxx
-    AND A   ; clear carry flag
-    RRA     ; 010xxxxx
-
-    XOR B   ;
-    AND $F8 ; keep the top 5 bits 11111000
-    XOR B   ; 010xxbbb
-    LD H,A  ; transfer high byte to H.
-
-    ; the low byte is derived from both X and Y.
-
-    LD A,C  ; the x value 0-255.
-    RLCA    ;
-    RLCA    ;
-    RLCA    ;
-    XOR B   ; the y value
-    AND $C7 ; apply mask 11000111
-    XOR B   ; restore unmasked bits  xxyyyxxx
-    RLCA    ; rotate to              xyyyxxxx
-    RLCA    ; required position.     yyyxxxxx
-    LD L,A  ; low byte to L.
-
-    ld a,c   ; load X position
-    and $07
-
-    ld bc,PIXELADD2_bits
-    add a,c
-    ld c,a
-    ld a,(bc)
-
-    ld b,(hl)
-    or b
-    ld (hl),a
-
-    pop bc
-ret
-PIXELADD2_bits: defb 128,64,32,16,8,4,2,1
-
-;http://www.zxpress.ru/article.php?id=7876
-PUBLIC _dejavuPOINT
-_dejavuPOINT:      ; plot e = x-axis, d = y-axis
-
-    push bc
-
-    LD DE,(_gfx_xy) ;$5F 4B
-    LD B,0x07
-    LD A,D
-    RRA
-    SCF
-    RRA
-    RRA
-    AND 0x5F
-    LD H,A
-    XOR E
-    AND B
-    XOR E
-    RRCA
-    RRCA
-    RRCA
-    LD L,A;here the back part of the address is made
-        ;;;;;;;;;
-    LD A,D
-    XOR H
-    AND B
-    XOR H
-    LD H,A;here the front part of the address is made
-        ;;;;;;;;;
-    ;;now we have the full address
-    LD A,E
-    AND 7
-    LD DE, dejavuPOINT_bits
-    ADD A,E
-    LD E,A
-    LD A,(DE)
-    XOR (HL)
-    LD (HL),A
-
-    or (hl) ; OR with screen contents
-    ld (hl),a   ; write to screen
-
-    pop bc
-RET
-dejavuPOINT_bits: defb 128,64,32,16,8,4,2,1
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-PUBLIC _Get_Pixel_Address2
-_Get_Pixel_Address2:
-
-    ld bc, (_gfx_xy)
-    LD A,B              ; Calculate Y2,Y1,Y0
-    AND %00000111   ;7  ; Mask out unwanted bits
-    OR %01000000    ;64 ; Set base address of screen
-    LD H,A              ; Store in H
-    LD A,B              ; Calculate Y7,Y6
-    RRA                 ; Shift to position
-    RRA
-    RRA
-    AND %00011000   ;24 ; Mask out unwanted bits
-    OR H                ; OR with Y2,Y1,Y0
-    LD H,A              ; Store in H
-    LD A,B              ; Calculate Y5,Y4,Y3
-    RLA                 ; Shift to position
-    RLA
-    AND %11100000   ;224    ; Mask out unwanted bits
-    LD L,A              ; Store in L
-    LD A,C              ; Calculate X4,X3,X2,X1,X0
-    RRA                 ; Shift into position
-    RRA
-    RRA
-    AND %00011111  ;31  ; Mask out unwanted bits
-    OR L                ; OR with Y5,Y4,Y3
-    LD L,A              ; Store in L
-    ;ADDRESS IS FULLY FORMED HERE IN HL
-
+    LD DE,PIXELADDRESSTBL   ; Base address of pixel address table (0-175)
+    LD H,$00
+    LD L,B
+    ADD HL,HL               ; HL = B * 2
+    ADD HL,DE               ; HL = table row address
+    LD E,(HL)
+    INC HL
+    LD D,(HL)               ; DE = screen row address
     LD A,C
-    AND 7
-    LD DE, WTF_bits
-    ADD A,E
-    LD E,A
-    LD A,(DE)
-    XOR (HL)
-    LD (HL),A
-
-
-    ;output to screen
-    or (hl)
-    ld (hl),a
-
-
-RET
-WTF_bits: defb 128,64,32,16,8,4,2,1
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-
-PUBLIC _rtunes_pixel
-_rtunes_pixel:
-
-    ;PUSH BC
-
-    ld de, (_gfx_xy)
-    LD a,d
-    AND A
     RRA
-    SCF ; Set Carry Flag
     RRA
-    AND A
     RRA
-    XOR d
-    AND %11111000   ;248
-    XOR d
-    LD H,A          ;LD D,A
-    LD A,e
-    RLCA
-    RLCA
-    RLCA
-    XOR d
-    AND %11000111   ;199 / $C7
-    XOR d
-    RLCA
-    RLCA
+    AND $1F                 ; A = C DIV 8 = Pixel byte address offset
+    LD H,$00
     LD L,A
-
-    LD A,e
-    AND 7
-
-    LD d, A
-
-    LD DE, rtunes_bits
-    ADD A,E
-    LD E,A
-    LD A,(DE)
-
-    ;output to screen
-    or (hl)
-    ld (hl),a
-
-    ;POP BC
+    ADD HL,DE               ; HL = screen pixel byte address
+    LD A,C
+    AND $07                 ; A = C MOD 8 = Pixel offset
 RET
 
-rtunes_bits: defb 128,64,32,16,8,4,2,1
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-;using DE
-PUBLIC _joffa_pixel
-_joffa_pixel:
-
-    ld de, (_gfx_xy)
-
-    ld a,d
-    srl a
-    srl a
-    srl a
-    and 0x18
-    or 0x40
-
-    ld h,a
-    ld a,d
-    and 7
-    or h
-    ld h,a
-
-    ld a,d
-    add a,a
-    add a,a
-    and 0xe0
-    ld l,a
-
-    ld  a,e
-    srl a
-    srl a
-    srl a
-    or l
-    ld l,a					; hl = screen address.
-
-
-    LD A,e
-    AND 7
-
-    LD d, A
-
-    LD DE, joffa_bits
-    ADD A,E
-    LD E,A
-    LD A,(DE)
-
-    ;output to screen
-    or (hl)
-    ld (hl),a
-
-
-ret
-
-joffa_bits: defb 128,64,32,16,8,4,2,1
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-
-PUBLIC _hellaPlot
-_hellaPlot:          ; plot d = x-axis, e = y-axis
-
-    ld de, (_gfx_xy)
-    ld a,7
-    and d
-    ld b,a
-    inc b
-    ld a,e
-
-    rra
-    scf
-    rra
-    or a
-    rra
-
-    ld l,a
-    xor e
-    and 248
-    xor e
-    ld h,a
-    ld a,d
-    xor l
-    and 7
-    xor d
-    rrca
-    rrca
-    rrca
-
-    ld l,a  ;$4f $69
-    LD A, D        ;4 t
-    AND 7          ;7 t
-
-    LD DE, hella_bits
-    ADD A,E
-    LD E,A
-    LD A,(DE)
-
-    ;output to screen
-    or (hl)
-    ld (hl),a
-
-
-ret
-
-hella_bits: defb 128,64,32,16,8,4,2,1
-
-
-
-
-
-
+PIXELADDRESSTBL:
+            defw $57A0,$56A0,$55A0,$54A0,$53A0,$52A0,$51A0,$50A0
+            defw $5780,$5680,$5580,$5480,$5380,$5280,$5180,$5080
+            defw $5760,$5660,$5560,$5460,$5360,$5260,$5160,$5060
+            defw $5740,$5640,$5540,$5440,$5340,$5240,$5140,$5040
+            defw $5720,$5620,$5520,$5420,$5320,$5220,$5120,$5020
+            defw $5700,$5600,$5500,$5400,$5300,$5200,$5100,$5000
+            defw $4FE0,$4EE0,$4DE0,$4CE0,$4BE0,$4AE0,$49E0,$48E0
+            defw $4FC0,$4EC0,$4DC0,$4CC0,$4BC0,$4AC0,$49C0,$48C0
+            defw $4FA0,$4EA0,$4DA0,$4CA0,$4BA0,$4AA0,$49A0,$48A0
+            defw $4F80,$4E80,$4D80,$4C80,$4B80,$4A80,$4980,$4880
+            defw $4F60,$4E60,$4D60,$4C60,$4B60,$4A60,$4960,$4860
+            defw $4F40,$4E40,$4D40,$4C40,$4B40,$4A40,$4940,$4840
+            defw $4F20,$4E20,$4D20,$4C20,$4B20,$4A20,$4920,$4820
+            defw $4F00,$4E00,$4D00,$4C00,$4B00,$4A00,$4900,$4800
+            defw $47E0,$46E0,$45E0,$44E0,$43E0,$42E0,$41E0,$40E0
+            defw $47C0,$46C0,$45C0,$44C0,$43C0,$42C0,$41C0,$40C0
+            defw $47A0,$46A0,$45A0,$44A0,$43A0,$42A0,$41A0,$40A0
+            defw $4780,$4680,$4580,$4480,$4380,$4280,$4180,$4080
+            defw $4760,$4660,$4560,$4460,$4360,$4260,$4160,$4060
+            defw $4740,$4640,$4540,$4440,$4340,$4240,$4140,$4040
+            defw $4720,$4620,$4520,$4420,$4320,$4220,$4120,$4020
+            defw $4700,$4600,$4500,$4400,$4300,$4200,$4100,$4000
 
 
 ;dmsmith
@@ -995,9 +283,5 @@ _calculate_screen_address:
     or (hl)
     ld (hl),a
 ret
-
-
-
-
 
 

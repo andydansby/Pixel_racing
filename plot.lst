@@ -4,5 +4,3 @@ plot.asm
 ; .lst files commented with semi-colon or hash
 # must have blank line after this
 
-
-; zcc +zx -vn -SO3 -m -lm -clib=new main.c -o 1bezier -startup=9 -create-app

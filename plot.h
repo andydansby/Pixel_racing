@@ -34,15 +34,13 @@ void unplot(int x, int y, unsigned char colour)
 void zxSpectrumROM (void)
 {
     zx_cls(PAPER_WHITE | INK_BLACK);
-    for (yy = 0; yy < 176; yy++)
+    for (yy = 0; yy < 192; yy++)//176   191
     {
         for (xx = 0; xx < 255 ; xx++)
         {
-            gfx_x = xx;
-            gfx_y = yy;
-            gfx_xy = yy << 8;
-            gfx_xy = gfx_xy | xx;
+            gfx_xy = (yy << 8) | xx;
             ZX_ROM();
+            //ZX_ROM2();
         }
     }
 }
@@ -68,8 +66,10 @@ void fastPlotter1 (void)
     {
         for (xx = 0; xx < 255 ; xx++)
         {
-            gfx_xy = xx << 8;
-            gfx_xy = gfx_xy | yy;
+            //gfx_xy = xx << 8;
+            //gfx_xy = gfx_xy | yy;
+
+            gfx_xy = (xx << 8) | yy;
             fastPlot1();
         }
     }
@@ -98,8 +98,10 @@ void putpix_routine (void)
     {
         for (xx = 0; xx < 255 ; xx++)
         {
-            gfx_xy = xx << 8;
-            gfx_xy = gfx_xy | yy;
+            //gfx_xy = xx << 8;
+            //gfx_xy = gfx_xy | yy;
+
+            gfx_xy = (xx << 8) | yy;
             putpix();
         }
     }
@@ -114,8 +116,10 @@ void AA_PLOT_routine (void)
     {
         for (xx = 0; xx < 255 ; xx++)
         {
-            gfx_xy = yy << 8;
-            gfx_xy = gfx_xy | xx;
+            //gfx_xy = yy << 8;
+            //gfx_xy = gfx_xy | xx;
+
+            gfx_xy = (yy << 8) | xx;
             AA_PLOT();
         }
     }
@@ -144,8 +148,10 @@ void CALC5_routine (void)
     {
         for (xx = 0; xx < 255 ; xx++)
         {
-            gfx_xy = yy << 8;
-            gfx_xy = gfx_xy | xx;
+            //gfx_xy = yy << 8;
+            //gfx_xy = gfx_xy | xx;
+
+            gfx_xy = (yy << 8) | xx;
             CALC5();
         }
     }
@@ -160,8 +166,10 @@ void PIXELADD_routine (void)
     {
         for (xx = 0; xx < 255 ; xx++)
         {
-            gfx_xy = yy << 8;
-            gfx_xy = gfx_xy | xx;
+            //gfx_xy = yy << 8;
+            //gfx_xy = gfx_xy | xx;
+
+            gfx_xy = (yy << 8) | xx;
 
             PIXELADD();
         }
@@ -178,8 +186,10 @@ void CALC55_routine (void)
     {
         for (xx = 0; xx < 255 ; xx++)
         {
-            gfx_xy = yy << 8;
-            gfx_xy = gfx_xy | xx;
+            //gfx_xy = yy << 8;
+            //gfx_xy = gfx_xy | xx;
+
+            gfx_xy = (yy << 8) | xx;
 
             CALC55();
         }
@@ -194,13 +204,31 @@ void PIXEL_ADD_2_routine (void)
     {
         for (xx = 0; xx < 255 ; xx++)
         {
-            gfx_xy = yy << 8;
-            gfx_xy = gfx_xy | xx;
-
+            gfx_xy = (yy << 8) | xx;
             PIXELADD2();
         }
     }
 }
+
+
+void z00m_routine (void)
+{
+    zx_cls(PAPER_WHITE | INK_BLACK);
+
+    for (yy = 0; yy < 192; yy++)
+    {
+        for (xx = 0; xx < 255 ; xx++)
+        {
+            gfx_xy = (yy << 8) | xx;
+            Z00M_PLOT2();
+        }
+    }
+}
+
+
+
+
+
 
 void DM_SMITH_routine (void)
 {
@@ -233,9 +261,7 @@ void dejavuPOINT_routine (void)
     {
         for (xx = 0; xx < 255 ; xx++)
         {
-            gfx_xy = yy << 8;
-            gfx_xy = gfx_xy | xx;
-
+            gfx_xy = (yy << 8) | xx;
             dejavuPOINT();
         }
     }
@@ -249,9 +275,7 @@ void Get_Pixel_Address2_routine (void)
     {
         for (xx = 0; xx < 255 ; xx++)
         {
-            gfx_xy = yy << 8;
-            gfx_xy = gfx_xy | xx;
-
+            gfx_xy = (yy << 8) | xx;
             Get_Pixel_Address2();
         }
     }
@@ -272,11 +296,9 @@ void fastBrain (void)
         }
     }
 
-    gfx_x = 75;
-    gfx_y = 95;
-    gfx_xy = gfx_x << 8;
-    gfx_xy = gfx_xy | gfx_y;
-    fastPlot1();            //_fastPlot1
+    gfx_xy = gfx_y << 8;
+    gfx_xy = gfx_xy | gfx_x;
+    rtunes_pixel();
 
     gfx_xy = 0;
 
@@ -284,10 +306,9 @@ void fastBrain (void)
     gfx_xy = gfx_xy | gfx_x;
     AA_PLOT();
 
-    gfx_xy = gfx_y << 8;
-    gfx_xy = gfx_xy | gfx_x;
-    Get_Pixel_Address();    //_Get_Pixel_Address
+
 }
+
 
 //https://worldofspectrum.org/forums/discussion/472/line-routine/p1
 void rtunes_pixelRoutine (void)
@@ -297,12 +318,12 @@ void rtunes_pixelRoutine (void)
     {
         for (xx = 0; xx < 255 ; xx++)
         {
-            gfx_xy = yy << 8;
-            gfx_xy = gfx_xy | xx;
+            gfx_xy = (yy << 8) | xx;
             rtunes_pixel();
         }
     }
 }
+
 
 void joffa_pixelRoutine (void)
 {
@@ -311,13 +332,36 @@ void joffa_pixelRoutine (void)
     {
         for (xx = 0; xx < 255 ; xx++)
         {
-            gfx_xy = yy << 8;
-            gfx_xy = gfx_xy | xx;
+            //gfx_xy = yy << 8;
+            //gfx_xy = gfx_xy | xx;
+
+            gfx_xy = (yy << 8) | xx;
             joffa_pixel();
         }
     }
 }
 
+void joffa_pixel2_routine (void)
+{
+    zx_cls(PAPER_WHITE | INK_BLACK);
+    for (yy = 0; yy < 192; yy++)
+    {
+        for (xx = 0; xx < 255 ; xx++)
+        {
+            //gfx_xy = yy << 8;
+            //gfx_xy = gfx_xy | xx;
+
+            gfx_xy = (yy << 8) | xx;
+            joffa_pixel2();
+        }
+    }
+
+    //gfx_x = 75;
+    //gfx_y = 95;
+    //gfx_xy = gfx_y << 8;
+    //gfx_xy = gfx_xy | gfx_x;
+    //joffa_pixel2();
+}
 
 void hellaPlotter1 (void)
 {
@@ -326,22 +370,50 @@ void hellaPlotter1 (void)
     {
         for (xx = 0; xx < 255 ; xx++)
         {
-            gfx_xy = xx << 8;
-            gfx_xy = gfx_xy | yy;
+            //gfx_xy = xx << 8;
+            //gfx_xy = gfx_xy | yy;
+
+            gfx_xy = (xx << 8) | yy;
             hellaPlot();
         }
     }
-    /*gfx_x = 75;
-    gfx_y = 95;
-    gfx_xy = gfx_x << 8;
-    gfx_xy = gfx_xy | gfx_y;
-    hellaPlot();
-
-    gfx_xy = gfx_y << 8;
-    gfx_xy = gfx_xy | gfx_x;
-    joffa_pixel();*/
 }
 
+void Belfield_routine (void)
+{
+    zx_cls(PAPER_WHITE | INK_BLACK);
+    for (yy = 0; yy < 192; yy++)
+    {
+        for (xx = 0; xx < 255 ; xx++)
+        {
+            gfx_xy = (yy << 8) | xx;
+            Belfield_Plot();
+        }
+    }
+}
+
+
+void einar_routine (void)
+{
+    zx_cls(PAPER_WHITE | INK_BLACK);
+    for (yy = 0; yy < 192; yy++)
+    {
+        for (xx = 0; xx < 255 ; xx++)
+        {
+            gfx_xy = (yy << 8) | xx;
+            einar_table();
+        }
+    }
+}
+
+
+
+
+
+
+
+
+//----------------------------------------
 
 void randomPixels (void)
 {
@@ -354,7 +426,7 @@ void randomPixels (void)
 
         gfx_xy = yy << 8;
         gfx_xy = gfx_xy | xx;
-        rtunes_pixel();
+        joffa_pixel2();
     }
 }
 
