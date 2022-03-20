@@ -19,8 +19,25 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
+		<Unit filename="../asm_files/AA_PLOT.asm" />
+		<Unit filename="../asm_files/Get_Pixel_Address.asm" />
+		<Unit filename="../asm_files/belfield.asm" />
+		<Unit filename="../asm_files/calc5.asm" />
+		<Unit filename="../asm_files/dejavuPOINT.asm" />
+		<Unit filename="../asm_files/dmsmith.asm" />
+		<Unit filename="../asm_files/fastPlot1.asm" />
+		<Unit filename="../asm_files/hella_plot.asm" />
+		<Unit filename="../asm_files/joffa_pixel.asm" />
+		<Unit filename="../asm_files/pixel_add.asm" />
+		<Unit filename="../asm_files/putpix.asm" />
+		<Unit filename="../asm_files/rtunes.asm" />
+		<Unit filename="../asm_files/table_plot.asm" />
+		<Unit filename="../asm_files/z00m.asm" />
+		<Unit filename="../asm_files/zx_ROM.asm" />
 		<Unit filename="../assembly.txt" />
 		<Unit filename="../backup.txt" />
+		<Unit filename="../changes.txt" />
+		<Unit filename="../cleanup.bat" />
 		<Unit filename="../compile.bat" />
 		<Unit filename="../credits.txt" />
 		<Unit filename="../errors.txt" />
@@ -29,6 +46,7 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="../mmap.inc" />
+		<Unit filename="../movefiles.bat" />
 		<Unit filename="../notes.txt" />
 		<Unit filename="../plot.asm" />
 		<Unit filename="../plot.h" />

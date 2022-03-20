@@ -2,12 +2,16 @@
 <results version="2">
     <cppcheck version="2.7" />
     <errors>
+        <error id="unusedFunction" severity="style" msg="The function &apos;asmPlot2Fill&apos; is never used." verbose="The function &apos;asmPlot2Fill&apos; is never used." cwe="561">
+            <location file="..\plot.h" line="419" column="0" />
+            <symbol>asmPlot2Fill</symbol>
+        </error>
         <error id="unusedFunction" severity="style" msg="The function &apos;beforeDrawing&apos; is never used." verbose="The function &apos;beforeDrawing&apos; is never used." cwe="561">
-            <location file="..\routines.h" line="33" column="0" />
+            <location file="..\routines.h" line="30" column="0" />
             <symbol>beforeDrawing</symbol>
         </error>
         <error id="unusedFunction" severity="style" msg="The function &apos;printBinary&apos; is never used." verbose="The function &apos;printBinary&apos; is never used." cwe="561">
-            <location file="..\routines.h" line="43" column="0" />
+            <location file="..\routines.h" line="40" column="0" />
             <symbol>printBinary</symbol>
         </error>
         <error id="unusedFunction" severity="style" msg="The function &apos;unplot&apos; is never used." verbose="The function &apos;unplot&apos; is never used." cwe="561">

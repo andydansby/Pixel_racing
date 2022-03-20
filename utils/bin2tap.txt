@@ -1,0 +1,23 @@
+bin2tap v.1.3
+Copyright (C) 2009 mike/zeroteam
+
+available from https://sourceforge.net/projects/zxspectrumutils/
+
+Usage: bin2tap [options] file.bin
+
+Options:
+  -o output_file      output TAP file
+  -p                  make 'Program' instead of 'Bytes'
+  -a address          start address of binary file [32768]
+  -x extra_address    extra address of binary file [32768]
+  -b                  include BASIC loader
+  -c clear_address    CLEAR address in BASIC loader [24575]
+  -r run_address      address where to start bin. file for BASIC loader [32768]
+  -cb border_colour   border colour set by loader [0]
+  -cp paper_colour    paper colour set by loader [0]
+  -ci ink_colour      ink colour set by loader [7]
+  -d80                create D80 syntax loader
+  -append             append tap at end of file
+  -hp | --header-poke include POKE command for dissabling tape headers
+  -h  | --help        usage information
+  -v  | --version     version info
