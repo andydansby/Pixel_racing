@@ -34,24 +34,24 @@ _Z00M_PLOT2:
     ld l,a
     ;HL now has the address
 
-    ld a,E   ; load X position
+    ld a, e   ; load X position
     and $07
     ld de, X_PositionBits
-    add a,E
-    ld E,a
+    add a, e
+    ld e, a
     ld a,(de)
 
-    ld D,(hl)
-    or D
+    ld d,(hl)
+    or d
     ld (hl),a
 
     ;output to screen
     or (hl)
     ld (hl),a
 
-
 ret ;return from the subroutine
 
 ;z00m_bits:
 ;defb 128,64,32,16,8,4,2,1
+
 

@@ -11,49 +11,49 @@ PUBLIC _table_plot
 _table_plot:
 
 ; keep the register BC
-    push bc
+;push bc
 
     ld hl, X_PositionBits
     ld a, (_gfx_x)
-    and 7       ; gfx_x mod 8
-    ld b,0
-    ld c,a
-    add hl,bc
-    ld a,(hl)
-    ld e,a      ; e contains one bit set
+    and 7	; gfx_x mod 8
+    ld b, 0
+    ld c, a
+    add hl, bc
+    ld a, (hl)
+    ld e, a ; e contains one bit set
 
     ld hl, tablinidx
     ld a, (_gfx_y)
-    ld b,0
-    ld c,a
-    add hl,bc
-    ld a,(hl)   ; table lookup
+    ld c, a
 
-    ld h,0
-    ld l,a
-    add hl,hl
-    add hl,hl
-    add hl,hl
-    add hl,hl
-    add hl,hl       ; x32 (16 bits)
+    add hl, bc
+    ld a, (hl)  ; table lookup
 
-    set 6,h         ; adds the screen start address (16384)
+    ld h, b
+    ld l, a
+    add hl, hl
+    add hl, hl
+    add hl, hl
+    add hl, hl
+    add hl, hl ; x32 (16 bits)
+
+    set 6, h	; adds the screen start address (16384)
 
     ld a, (_gfx_x)
     srl a
     srl a
-    srl a           ; gfx_x/8.
+    srl a	; gfx_x/8.
 
     or l
-    ld l,a         ; + gfx_x/8.
+    ld l, a	; + gfx_x/8.
 
-    ld a,(hl)
-    or e           ; or = superposition mode.
-    ld (hl),a      ; set the pixel.
+    ld a, (hl)
+    or e	; or = superposition mode.
+    ld (hl), a	; set the pixel.
 
-    pop bc          ; recovers BC
+    ;pop bc          ; recovers BC
+
 ret
-
 ;; -----------------------------------------------
 ;tabpow2:
     ;; lookup table with powers of 2

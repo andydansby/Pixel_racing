@@ -14,7 +14,7 @@
 PUBLIC _CALC5
 _CALC5:
 ;--------------------------------------------
-    push bc
+    ;push bc
     ld bc, (_gfx_xy)
     ; Calculation of the upper part of the address:
     LD A,B
@@ -49,22 +49,21 @@ _CALC5:
 
     ld a,c   ; load X position
     and $07
-    ;ld b,a
 
     ;Relative_to_Mask:
-    LD B, A ; We load A (pixel position) into B
-    INC B   ; We increment B (for loop passes)
-    XOR A   ; A = 0
-    SCF ; Set Carry Flag (A=0, CF=1)
+    ld b, a ; We load A (pixel position) into B
+    inc b   ; We increment B (for loop passes)
+    xor a   ; A = 0
+    scf ; Set Carry Flag (A=0, CF=1)
 
 CALC5_rotate:
-    RRA     ; We rotate A to the right B times
+    rra     ; We rotate A to the right B times
     DJNZ CALC5_rotate
 
     or (hl) ; OR with screen contents
     ld (hl),a   ; write to screen
 
-    pop bc
+    ;pop bc
 RET
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -124,6 +123,9 @@ _CALC55:
 
     ;pop de
 ret
+
+
+
 ;CALC55_bits: defb 128,64,32,16,8,4,2,1
 
 

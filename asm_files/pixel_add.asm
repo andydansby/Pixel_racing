@@ -11,8 +11,6 @@
 PUBLIC _PIXELADD
 _PIXELADD:
 
-    push bc ;save bc register
-
     ld BC, (_gfx_xy)
 
     ld A, B
@@ -43,8 +41,6 @@ _PIXELADD:
 
     ld a,c   ; load X position
     and $07
-    ;ld b,a
-
     ;Relative_to_Mask:
     LD B, A ; We load A (pixel position) into B
     INC B   ; We increment B (for loop passes)
@@ -58,7 +54,6 @@ PIXELADD_rotate:
     or (hl) ; OR with screen contents
     ld (hl),a   ; write to screen
 
-    pop bc  ;restore register
 RET ; return
 
 
@@ -67,7 +62,7 @@ RET ; return
 PUBLIC _PIXELADD2
 _PIXELADD2:
 
-    push bc
+    ;push bc
     ld BC, (_gfx_xy)
 
     ld A, B
@@ -109,7 +104,7 @@ _PIXELADD2:
     or b
     ld (hl),a
 
-    pop bc
+    ;pop bc
 ret
 
 ;PIXELADD2_bits: defb 128,64,32,16,8,4,2,1

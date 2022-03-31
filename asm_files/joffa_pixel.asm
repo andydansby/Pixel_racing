@@ -58,48 +58,48 @@ ret
 PUBLIC _joffa_pixel2
 _joffa_pixel2:
 
-    LD DE, (_gfx_xy)
-    LD A, D
+    ld de, (_gfx_xy)
+    ld a, d
 
-    RRCA
-    RRCA
-    RRCA
+    rrca
+    rrca
+    rrca
 
 
-    AND %00011000   ;24 = 0x18
-    OR  %01000000   ;64 = 0x40
+    and %00011000   ;24 = 0x18
+    or  %01000000   ;64 = 0x40
 
-    LD H, A
-    LD A, D
-    AND 7
-    OR H
-    LD H, A
+    ld h, a
+    ld a, d
+    and 7
+    or h
+    ld h, a
 
-    LD A, D
-    ADD A, A
-    ADD A, A
-    AND %11100000
-    LD L, A
+    ld a, d
+    add a, a
+    add a, a
+    and %11100000
+    ld l, a
 
-    LD A, E
+    ld a, e
 
-    RRCA
-	RRCA
-	RRCA
-	AND %00011111
+    rrca
+    rrca
+    rrca
+	and %00011111
 
-    OR L
-    LD L,A					; hl = screen address.
+    or l
+    ld l, a  ; hl = screen address.
 
-    LD A,E
-    AND 7
+    ld a, e
+    and 7
 
-    LD D, A
+    ;LD d, a
 
-    LD DE, X_PositionBits
-    ADD A,E
-    LD E,A
-    LD A,(DE)
+    ld de, X_PositionBits
+    add a, e
+    ld e, a
+    ld a, (de)
 
     ;output to screen
     or (hl)
