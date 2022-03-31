@@ -62,7 +62,7 @@ void options1 (void)
     {
 
         if (in_key_pressed( IN_KEY_SCANCODE_q ))
-		{   //SPECCY ROM
+		{   //SPECCY ROM    T-state
 		    zx_cls(PAPER_WHITE | INK_BLUE);
 		    printf("\x16\x01\x02");
 		    timerStart();
@@ -71,12 +71,13 @@ void options1 (void)
 		    zxSpectrumROM();
 
             timerEnd();
+            printf("210-339 T-states per pixel\n");
             waitForKey ();
             break;
 		}
 
 		if (in_key_pressed( IN_KEY_SCANCODE_w ))
-		{   //Z88DK built in
+		{   //Z88DK PLOT
 		    zx_cls(PAPER_WHITE | INK_BLUE);
 		    printf("\x16\x01\x02");
 		    timerStart();
@@ -84,25 +85,41 @@ void options1 (void)
 		    z88dkPlotFill();
 
             timerEnd();
+            printf("518 T-states per pixel\n");
             waitForKey ();
             break;
 		}
 
 		if (in_key_pressed( IN_KEY_SCANCODE_e ))
-		{   //_fastPlot1
+		{//metalBrain CALC 5    T-state
 		    zx_cls(PAPER_WHITE | INK_BLUE);
 		    printf("\x16\x01\x02");
 		    timerStart();
 
-		    fastPlotter1();
+		    CALC5_routine();
 
             timerEnd();
+            printf("190-309 T-states per pixel\n");
             waitForKey ();
             break;
 		}
 
 		if (in_key_pressed( IN_KEY_SCANCODE_r ))
-		{   //_table_plot
+		{   //PIXELADD      T-state
+		    zx_cls(PAPER_WHITE | INK_BLACK);
+		    printf("\x16\x01\x02");
+		    timerStart();
+
+            PIXELADD_routine();
+
+            timerEnd();
+            printf("166-292 T-states per pixel\n");
+            waitForKey ();
+            break;
+		}
+
+		if (in_key_pressed( IN_KEY_SCANCODE_t ))
+		{   //_table_plot   T-state
 		    zx_cls(PAPER_WHITE | INK_BLUE);
 		    printf("\x16\x01\x02");
 		    timerStart();
@@ -110,12 +127,69 @@ void options1 (void)
 		    tablePlotFill();
 
             timerEnd();
+            printf("252 T-states per pixel\n");
             waitForKey ();
             break;
 		}
 
-		if (in_key_pressed( IN_KEY_SCANCODE_t ))
-		{   //putpix_routine
+		if (in_key_pressed( IN_KEY_SCANCODE_y ))
+		{   //_fastPlot1    T-state
+		    zx_cls(PAPER_WHITE | INK_BLUE);
+		    printf("\x16\x01\x02");
+		    timerStart();
+
+		    fastPlotter1();
+
+            timerEnd();
+            printf("164-283 T-states per pixel\n");
+            waitForKey ();
+            break;
+		}
+
+		if (in_key_pressed( IN_KEY_SCANCODE_u ))
+		{   //joffa_pixel   T-state
+		    zx_cls(PAPER_WHITE | INK_BLUE);
+		    printf("\x16\x01\x02");
+		    timerStart();
+
+		    joffa_pixelRoutine();
+
+            timerEnd();
+            printf("204 T-states per pixel\n");
+            waitForKey ();
+            break;
+		}
+
+		if (in_key_pressed( IN_KEY_SCANCODE_i ))
+		{   //Belfield_Plot T-state
+		    zx_cls(PAPER_WHITE | INK_BLUE);
+		    printf("\x16\x01\x02");
+		    timerStart();
+
+		    Belfield_routine();
+
+            timerEnd();
+            printf("201 T-states per pixel\n");
+            waitForKey ();
+            break;
+		}
+
+		if (in_key_pressed( IN_KEY_SCANCODE_o ))
+		{   //PIXEL-ADD w/ table    T-State
+		    zx_cls(PAPER_WHITE | INK_BLACK);
+		    printf("\x16\x01\x02");
+		    timerStart();
+
+            PIXEL_ADD_2_routine();
+
+            timerEnd();
+            printf("174 T-states per pixel\n");
+            waitForKey ();
+            break;
+		}
+
+		if (in_key_pressed( IN_KEY_SCANCODE_p ))
+		{   //putpix_routine        T-State
 		    zx_cls(PAPER_WHITE | INK_BLUE);
 		    printf("\x16\x01\x02");
 		    timerStart();
@@ -123,11 +197,101 @@ void options1 (void)
 		    putpix_routine ();
 
             timerEnd();
+            printf("191 T-states per pixel\n");
             waitForKey ();
             break;
 		}
 
-        if (in_key_pressed( IN_KEY_SCANCODE_y ))
+		if (in_key_pressed( IN_KEY_SCANCODE_a ))
+		{   //Calc 5 w/ table    T-State
+		    zx_cls(PAPER_WHITE | INK_BLACK);
+		    printf("\x16\x01\x02");
+		    timerStart();
+
+            CALC55_routine();
+
+            timerEnd();
+            printf("191 T-states per pixel\n");
+            waitForKey ();
+            break;
+		}
+
+		if (in_key_pressed( IN_KEY_SCANCODE_s ))
+		{   //Joffa Optimized    T-State
+		    zx_cls(PAPER_WHITE | INK_BLUE);
+		    printf("\x16\x01\x02");
+		    timerStart();
+
+		    joffa_pixel2_routine();
+
+            timerEnd();
+            printf("187 T-states per pixel\n");
+            waitForKey ();
+            break;
+		}
+
+        if (in_key_pressed( IN_KEY_SCANCODE_d ))
+		{   //z00m plot    T-State
+		    zx_cls(PAPER_WHITE | INK_BLUE);
+		    printf("\x16\x01\x02");
+		    timerStart();
+
+		    z00m_routine();
+
+            timerEnd();
+            printf("188 T-states per pixel\n");
+            waitForKey ();
+            break;
+		}
+
+        if (in_key_pressed( IN_KEY_SCANCODE_f ))
+		{   //dejavuPOINT   T-state
+		    zx_cls(PAPER_WHITE | INK_BLACK);
+		    printf("\x16\x01\x02");
+		    timerStart();
+
+            dejavuPOINT_routine();
+
+            timerEnd();
+            printf("177 T-states per pixel\n");
+            waitForKey ();
+            break;
+		}
+
+		if (in_key_pressed( IN_KEY_SCANCODE_g ))
+		{   //_fastPlot1 / hella_plot   T-state
+		    zx_cls(PAPER_WHITE | INK_BLUE);
+		    printf("\x16\x01\x02");
+		    timerStart();
+
+		    hellaPlotter1();
+
+            timerEnd();
+            printf("181 T-states per pixel\n");
+            waitForKey ();
+            break;
+		}
+
+		if (in_key_pressed( IN_KEY_SCANCODE_h ))
+		{   //rtunes_pixel w/ table
+		    zx_cls(PAPER_WHITE | INK_BLUE);
+		    printf("\x16\x01\x02");
+		    timerStart();
+
+		    rtunes_pixelRoutine();
+
+            timerEnd();
+            printf("170 T-states per pixel\n");
+            waitForKey ();
+
+            break;
+		}
+
+
+
+		//////////////meh
+
+        if (in_key_pressed( IN_KEY_SCANCODE_x ))
 		{   //AA_PLOT
 		    zx_cls(PAPER_WHITE | INK_BLUE);
 		    printf("\x16\x01\x02");
@@ -140,160 +304,13 @@ void options1 (void)
             break;
 		}
 
-		if (in_key_pressed( IN_KEY_SCANCODE_u ))
+		if (in_key_pressed( IN_KEY_SCANCODE_c ))
 		{   //_Get_Pixel_Address
 		    zx_cls(PAPER_WHITE | INK_BLACK);
 		    printf("\x16\x01\x02");
 		    timerStart();
 
             Get_Pixel_Address_routine();
-
-            timerEnd();
-            waitForKey ();
-            break;
-		}
-
-		if (in_key_pressed( IN_KEY_SCANCODE_i ))
-		{//metalBrain CALC 5
-		    zx_cls(PAPER_WHITE | INK_BLUE);
-		    printf("\x16\x01\x02");
-		    timerStart();
-
-		    CALC5_routine();
-
-            timerEnd();
-            waitForKey ();
-            break;
-		}
-
-		if (in_key_pressed( IN_KEY_SCANCODE_o ))
-		{   //PIXELADD
-		    zx_cls(PAPER_WHITE | INK_BLACK);
-		    printf("\x16\x01\x02");
-		    timerStart();
-
-            PIXELADD_routine();
-
-            timerEnd();
-            waitForKey ();
-            break;
-		}
-
-		if (in_key_pressed( IN_KEY_SCANCODE_p ))
-		{   //PIXELADD
-		    zx_cls(PAPER_WHITE | INK_BLACK);
-		    printf("\x16\x01\x02");
-		    timerStart();
-
-            CALC55_routine();
-
-            timerEnd();
-            waitForKey ();
-            break;
-		}
-
-		if (in_key_pressed( IN_KEY_SCANCODE_a ))
-		{   //PIXELADD
-		    zx_cls(PAPER_WHITE | INK_BLACK);
-		    printf("\x16\x01\x02");
-		    timerStart();
-
-            PIXEL_ADD_2_routine();
-
-            timerEnd();
-            waitForKey ();
-            break;
-		}
-
-        if (in_key_pressed( IN_KEY_SCANCODE_s ))
-		{   //PIXELADD
-		    zx_cls(PAPER_WHITE | INK_BLACK);
-		    printf("\x16\x01\x02");
-		    timerStart();
-
-            dejavuPOINT_routine();
-
-            //printf("time MS =  %ld\n", timeDiff);
-		    //forcedPause(15000);
-            //pressKey ();
-            timerEnd();
-            waitForKey ();
-            break;
-		}
-
-		if (in_key_pressed( IN_KEY_SCANCODE_d ))
-		{
-		    zx_cls(PAPER_WHITE | INK_BLUE);
-		    printf("\x16\x01\x02");
-		    timerStart();
-
-		    rtunes_pixelRoutine();
-
-            timerEnd();
-            waitForKey ();
-
-            break;
-		}
-
-        if (in_key_pressed( IN_KEY_SCANCODE_f ))
-		{
-		    zx_cls(PAPER_WHITE | INK_BLUE);
-		    printf("\x16\x01\x02");
-		    timerStart();
-
-		    joffa_pixelRoutine();
-
-            timerEnd();
-            waitForKey ();
-            break;
-		}
-
-		if (in_key_pressed( IN_KEY_SCANCODE_g ))
-		{   //_fastPlot1
-		    zx_cls(PAPER_WHITE | INK_BLUE);
-		    printf("\x16\x01\x02");
-		    timerStart();
-
-		    hellaPlotter1();
-
-            timerEnd();
-            waitForKey ();
-            break;
-		}
-
-		if (in_key_pressed( IN_KEY_SCANCODE_h ))
-		{//more optimized Joffa routine
-		    zx_cls(PAPER_WHITE | INK_BLUE);
-		    printf("\x16\x01\x02");
-		    timerStart();
-
-		    joffa_pixel2_routine();
-
-            timerEnd();
-            waitForKey ();
-            break;
-		}
-
-        if (in_key_pressed( IN_KEY_SCANCODE_j ))
-		{
-		    zx_cls(PAPER_WHITE | INK_BLUE);
-		    printf("\x16\x01\x02");
-		    timerStart();
-
-		    z00m_routine();
-
-            timerEnd();
-            waitForKey ();
-            break;
-		}
-
-        if (in_key_pressed( IN_KEY_SCANCODE_k ))
-		{
-		    zx_cls(PAPER_WHITE | INK_BLUE);
-		    printf("\x16\x01\x02");
-		    timerStart();
-
-		    Belfield_routine();
 
             timerEnd();
             waitForKey ();
@@ -329,19 +346,6 @@ void options1 (void)
             break;
 		}
 
-		if (in_key_pressed( IN_KEY_SCANCODE_1 ))
-		{   //PIXELADD
-		    zx_cls(PAPER_WHITE | INK_BLACK);
-		    printf("\x16\x01\x02");
-		    timerStart();
-
-            DM_SMITH_routine();
-
-            timerEnd();
-            waitForKey ();
-            break;
-		}
-
 		if (in_key_pressed( IN_KEY_SCANCODE_2 ))
 		{   //PIXELADD
 		    zx_cls(PAPER_WHITE | INK_BLACK);
@@ -356,19 +360,6 @@ void options1 (void)
 		}
 		////////////////////////////////
 
-		if (in_key_pressed( IN_KEY_SCANCODE_4 ))
-		{
-		    zx_cls(PAPER_WHITE | INK_BLUE);
-		    printf("\x16\x01\x02");
-		    timerStart();
-
-		    fastBrain();
-
-            timerEnd();
-            waitForKey ();
-            break;
-		}
-
 		if (in_key_pressed( IN_KEY_SCANCODE_5 ))
 		{
 		    zx_cls(PAPER_WHITE | INK_BLUE);
@@ -376,19 +367,6 @@ void options1 (void)
 		    timerStart();
 
 		    loop_tester_routine();
-
-            timerEnd();
-            waitForKey ();
-            break;
-		}
-
-		if (in_key_pressed( IN_KEY_SCANCODE_6 ))
-		{
-		    zx_cls(PAPER_WHITE | INK_BLUE);
-		    printf("\x16\x01\x02");
-		    timerStart();
-
-		    //Get_Pixel_Address_routine ();
 
             timerEnd();
             waitForKey ();
@@ -410,11 +388,6 @@ void options1 (void)
 		}
 
 
-
-
-
-
-
     }//end while
 }//end options1
 
@@ -427,30 +400,31 @@ void printOptions (void)
         zx_border (2);
         printf("\x16\x01\x02");
 
-        printf ("Welcome to the Plot tester V0.2\n");
+        printf ("Welcome to the Plot tester V0.3\n");
         printf ("press a key for test\n");
         printf ("\n");
 
-        printf ("q - ZX ROM      470-589 T-states per pixel\n");
-        printf ("w - z88dk Plot  518     T-states per pixel\n");
-        printf ("e - fastPlot1    164-283 T-states per pixel\n");
-        printf ("r - Table Plot   292     T-states per pixel\n");
-        printf ("t - PutPix       196     T-states per pixel\n");
-        printf ("y - AA Plot      238-369 T-states per pixel\n");
-        printf ("u - Get_Pixel_Address 204-333 T-states per\n");
-        printf ("i - CALC5        215-334 T-states per pixel\n");
-        printf ("o - PIXEL-ADD    201-320 T-states per pixel\n");
-        printf ("p - Calc 5 w/ table 222 T-states per pixel\n");
-        printf ("a - PIXEL-ADD w/ table 191 T-states per\n");
-        printf ("s - dejavuPOINT w/ table 206 T-states per\n");
-        printf ("d - rtunes_pixel w/ table 174 T-states per\n");
-        printf ("f - joffa_pixel w/ table  198 T-states per\n");
-        printf ("g - hella_plot w/ table   174 T-states per\n");
-        printf ("h - Joffa Optimized       191 T-states per\n");
-        printf ("j - z00m Optimized        188 T-states per\n");
-        printf ("k - Belfield Optimized    ??? T-states per\n");
-        //printf ("1-0 - Tester Routines, may be junk\n\n");
+        printf ("q - ZX ROM\n");
+        printf ("w - z88dk Plot\n");
+        printf ("e - CALC5\n");
+        printf ("r - PIXEL-ADD\n");
+        printf ("t - Table Plot\n");
+        printf ("y - fastPlot1\n");
+        printf ("u - joffa_pixel w/ table\n");
+        printf ("i - Belfield Optimized\n");
+        printf ("o - PIXEL-ADD w/ table\n");
+        printf ("p - PutPix\n");
+        printf ("a - Calc 5 w/ table\n");
+        printf ("s - Joffa Optimized\n");
+        printf ("d - z00m Optimized\n");
+        printf ("f - dejavuPOINT Optimized w/ table\n");
+        printf ("g - hella_plot w/ table\n");
+        printf ("h - rtunes_pixel w/ table\n");
 
+        //printf ("x - AA Plot      238-369 T-states per pixel\n");
+        //printf ("c - Get_Pixel_Address 204-333 T-states per\n");
+
+        //printf ("1-0 - Tester Routines, may be junk\n\n");
 
     }
 

@@ -19,7 +19,12 @@ _gfx_yx:
 defw 0
 
 ;;;
-X_PositionBits: defb 128,64,32,16,8,4,2,1
+;X_PositionBits: defb 128,64,32,16,8,4,2,1
+X_PositionBits: defb $80,$40,$20,$10,$08,$04,$02,$01
+
+;DEFC X_PositionBits = 128,64,32,16,8,4,2,1
+;X_PositionBits1 equ $80,$40,$20,$10,$08,$04,$02,$01
+;defc X_PositionBits1 equ $80,$40,$20,$10,$08,$04,$02,$01
 ;;;
 
 ; WORKING ROUTINES
@@ -28,6 +33,8 @@ X_PositionBits: defb 128,64,32,16,8,4,2,1
 ;HL = 16 bit
 ;DEHL = 32 bit
 ;;;;;;;;;;;;;;;;;;
+;read up on
+;https://worldofspectrum.org/forums/discussion/472/line-routine/p1
 
 include "\asm_files\zx_ROM.asm"
 include "\asm_files\fastPlot1.asm"
