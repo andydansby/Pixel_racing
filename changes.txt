@@ -34,4 +34,17 @@ add Belfield_routine
 move X position bitfield to plot.asm and
     commended out of individual routines
 
+ver .03
+
+Tweak and optimizations on
+Rtunes , now plotting even faster
+hellaPlot
+Pixel Add with table
+Joffa Optimized
+Belfield plot
+
+There are now 4 routines that are 20%
+faster than the ROM Plot
+
+moved T state count to after the screen pixel fill
 
